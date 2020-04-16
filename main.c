@@ -3,18 +3,21 @@ Implemented features:
 - Tank is controllable with the arrow-keys and is completely animated
 - Beacons are placeable (A) and pick-up-able (B), and their animation is binded to the location of the target
 - Win state occurs upon colliding with target, lose state triggers after 120seconds otherwise
-- Targets and beacons now naturally spawn on specific grid tiles
+- Targets, traps, and beacons now naturally spawn on specific grid tiles
+- Over time, 'traps' (normally invisible but, like target, rendered visible for grading/testing) randomly spawn that temporarily halt the player
 
 Forthcoming features:
-- Music for the game, sound effects for placing beacons
+- Music for the game, sound effects for placing beacons and maybe while being 'trapped'
 - Cheat to make the target visible/invisible
-- Larger background? (I've made several sizes, depends what I can figure out how to implement)
-- Non-placeholder art for splash screen, pause, etc.
+- Larger background? (I've made several sizes in my pixel art editor file (.gm81), depends what I can figure out how to implement, sticking with the small version for now for testing purposes)
+- New non-placeholder art for splash screen, pause, etc.
 
 Known bugs:
 - Beacons sometimes seem to flicker in a different location for a split-second before spawning at the correct location
 - my current rounding system for matching beacons to grid locations prevents the tank from placing beacons on the far-left row or top column. Unclear if there's a way to fix this without causing bigger problems yet.
+- I was having some weird flickering and location-swapping issues with traps early on, 90% sure I squashed all those bugs after a bunch of testing but it's hard to be 100% certain with so many of them...
 */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "myLib.h"

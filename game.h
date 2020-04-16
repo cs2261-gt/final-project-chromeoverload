@@ -38,6 +38,7 @@ typedef struct {
 } BEACON;
 
 //consts
+#define NUMTRAPS 30
 #define NUMBEACONS 5
 #define BKGSIZE 256
 
@@ -46,7 +47,7 @@ void initGame();
 void updateGame();
 void drawGame();
 
-//Target Struct
+//Target/Trap Struct
 typedef struct {
 	int row;
 	int col;
@@ -62,4 +63,5 @@ typedef struct {
     int curFrame;
     int numFrames;
     int visible;
+	int active;
 } TARGET;

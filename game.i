@@ -1396,6 +1396,7 @@ typedef struct {
 
 
 
+
 void initGame();
 void updateGame();
 void drawGame();
@@ -1416,6 +1417,7 @@ typedef struct {
     int curFrame;
     int numFrames;
     int visible;
+ int active;
 } TARGET;
 # 7 "game.c" 2
 # 1 "spritesheet.h" 1
@@ -1429,11 +1431,13 @@ extern const unsigned short spritesheetPal[256];
 ANISPRITE tank;
 BEACON beacons[5];
 TARGET target;
+TARGET traps[30];
 
 enum {UP, RIGHT, DOWN, LEFT};
 enum {NUL, SE, SW, NW, NE, NN, EE, SS, WW};
 int gmState;
 int loseCount;
+int canMove;
 
 
 void initGame() {
@@ -1441,6 +1445,7 @@ void initGame() {
     vOff = 0;
     gmState = 0;
     loseCount = 0;
+    canMove = 1;
 
 
     tank.width = 32;
@@ -1471,51 +1476,61 @@ void initGame() {
     target.visible = 1;
 
 
+    for(int i = 0; i < 30; i++) {
+        traps[i].width = 16;
+        traps[i].height = 16;
+        traps[i].visible = 1;
+        traps[i].active = 0;
+    }
+
+
     DMANow(3, spritesheetPal, ((unsigned short *)0x5000200), 256);
  DMANow(3, spritesheetTiles, &((charblock *)0x6000000)[4], 32768 / 2);
 }
 
 void updateGame() {
 
-    if((~((*(volatile unsigned short *)0x04000130)) & ((1<<6)))) {
-        tank.aniState = UP;
-        if(tank.worldRow > 0) {
-            tank.worldRow -= tank.rdel;
-            if (vOff > 0 && tank.screenRow <= 160 / 2) {
-                vOff--;
+    if(canMove == 1) {
+        if((~((*(volatile unsigned short *)0x04000130)) & ((1<<6)))) {
+            tank.aniState = UP;
+            if(tank.worldRow > 0) {
+                tank.worldRow -= tank.rdel;
+                if (vOff > 0 && tank.screenRow <= 160 / 2) {
+                    vOff--;
+                }
             }
         }
-    }
-    if((~((*(volatile unsigned short *)0x04000130)) & ((1<<7)))) {
-        tank.aniState = DOWN;
-        if ((tank.worldRow + tank.height) < 256) {
+        if((~((*(volatile unsigned short *)0x04000130)) & ((1<<7)))) {
+            tank.aniState = DOWN;
+            if ((tank.worldRow + tank.height) < 256) {
 
-            tank.worldRow += tank.rdel;
-            if ((vOff + 160) < 256 && tank.screenRow >= (160 / 2)) {
+                tank.worldRow += tank.rdel;
+                if ((vOff + 160) < 256 && tank.screenRow >= (160 / 2)) {
 
-                vOff++;
+                    vOff++;
+                }
             }
         }
-    }
-    if((~((*(volatile unsigned short *)0x04000130)) & ((1<<5)))) {
-        tank.aniState = LEFT;
-        if (tank.worldCol > 0) {
+        if((~((*(volatile unsigned short *)0x04000130)) & ((1<<5)))) {
+            tank.aniState = LEFT;
+            if (tank.worldCol > 0) {
 
-            tank.worldCol -= tank.cdel;
-            if (hOff > 0 && tank.screenCol <= 240 / 2) {
+                tank.worldCol -= tank.cdel;
+                if (hOff > 0 && tank.screenCol <= 240 / 2) {
 
-                hOff--;
+                    hOff--;
+                }
             }
         }
-    }
-    if((~((*(volatile unsigned short *)0x04000130)) & ((1<<4)))) {
-        tank.aniState = RIGHT;
-        if ((tank.worldCol + tank.width) < 256) {
+        if((~((*(volatile unsigned short *)0x04000130)) & ((1<<4)))) {
+            tank.aniState = RIGHT;
+            if ((tank.worldCol + tank.width) < 256) {
 
-            tank.worldCol += tank.cdel;
-            if (hOff + 240 < 256 && tank.screenCol >= 240 / 2) {
+                tank.worldCol += tank.cdel;
+                if (hOff + 240 < 256 && tank.screenCol >= 240 / 2) {
 
-                hOff++;
+                    hOff++;
+                }
             }
         }
     }
@@ -1524,7 +1539,23 @@ void updateGame() {
     if(tank.aniCounter % 10 == 0) {
         tank.curFrame = (tank.curFrame + 1) % tank.numFrames;
 
+
         loseCount++;
+
+
+        if(loseCount % 40 == 0) {
+            int i = 0;
+            while (i < 30 && traps[i].active == 1) {
+                i++;
+            }
+            if(i < 30) {
+                traps[i].active = 1;
+                traps[i].row = (rand() % (256 / 16)) * 16;
+                traps[i].col = (rand() % (256 / 16)) * 16;
+            }
+            canMove = 1;
+        }
+
         if(loseCount > 720) {
             gmState = -1;
         }
@@ -1533,6 +1564,18 @@ void updateGame() {
     tank.screenRow = tank.worldRow - vOff;
     tank.screenCol = tank.worldCol - hOff;
 
+
+    for(int i = 0; i < 30; i++) {
+        if(traps[i].active == 1) {
+            if(collision(traps[i].col, traps[i].row, traps[i].width, traps[i].height, tank.worldCol, tank.worldRow, tank.width, tank.height)) {
+                traps[i].active = 0;
+                canMove = 0;
+            }
+
+            traps[i].screenRow = traps[i].row - vOff;
+            traps[i].screenCol = traps[i].col - hOff;
+        }
+    }
 
 
     for(int j = 0; j < 5; j++) {
@@ -1613,9 +1656,22 @@ void drawGame() {
     }
 
 
-    shadowOAM[1].attr0 = (target.screenRow) | (0<<14);
-    shadowOAM[1].attr1 = (target.screenCol) | (1<<14);
-    shadowOAM[1].attr2 = ((0)<<12) | ((0)*32+(18));
+    if(target.visible == 1) {
+        shadowOAM[1].attr0 = (target.screenRow) | (0<<14);
+        shadowOAM[1].attr1 = (target.screenCol) | (1<<14);
+        shadowOAM[1].attr2 = ((0)<<12) | ((0)*32+(18));
+    }
+
+
+    for(int i = 0; i < 30; i++) {
+        if(traps[i].active == 1 && traps[i].visible == 1) {
+            shadowOAM[i+5 +2].attr0 = (traps[i].screenRow) | (0<<14);
+            shadowOAM[i+5 +2].attr1 = (traps[i].screenCol) | (1<<14);
+            shadowOAM[i+5 +2].attr2 = ((0)<<12) | ((0)*32+(20));
+        } else {
+            shadowOAM[i+5 +2].attr0 = (2<<8);
+        }
+    }
 
 
     waitForVBlank();

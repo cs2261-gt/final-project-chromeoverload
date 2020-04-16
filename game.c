@@ -9,11 +9,13 @@
 ANISPRITE tank;
 BEACON beacons[NUMBEACONS];
 TARGET target;
+TARGET traps[NUMTRAPS];
 
 enum {UP, RIGHT, DOWN, LEFT};
 enum {NUL, SE, SW, NW, NE, NN, EE, SS, WW};
 int gmState;
 int loseCount;
+int canMove;
 
 
 void initGame() {
@@ -21,6 +23,7 @@ void initGame() {
     vOff = 0;
     gmState = 0;
     loseCount = 0;
+    canMove = 1;
     
     //init TANK
     tank.width = 32;
@@ -48,7 +51,15 @@ void initGame() {
     target.height = 16;
     target.row = (rand() % (BKGSIZE / 16)) * 16; //rand() % (BKGSIZE - (target.height))
     target.col = (rand() % (BKGSIZE / 16)) * 16; //rand() % (BKGSIZE - (target.width))
-    target.visible = 1; //FOR TESTING / M1
+    target.visible = 1; //FOR TESTING
+
+    //init TRAPS
+    for(int i = 0; i < NUMTRAPS; i++) {
+        traps[i].width = 16;
+        traps[i].height = 16;
+        traps[i].visible = 1; //FOR TESTING
+        traps[i].active = 0;
+    }
 
     //init GENERAL
     DMANow(3, spritesheetPal, SPRITEPALETTE, 256);
@@ -57,45 +68,47 @@ void initGame() {
 
 void updateGame() {
     //update TANK
-    if(BUTTON_HELD(BUTTON_UP)) {
-        tank.aniState = UP;
-        if(tank.worldRow > 0) {
-            tank.worldRow -= tank.rdel;
-            if (vOff > 0 && tank.screenRow <= SCREENHEIGHT / 2) {
-                vOff--;
+    if(canMove == 1) {
+        if(BUTTON_HELD(BUTTON_UP)) {
+            tank.aniState = UP;
+            if(tank.worldRow > 0) {
+                tank.worldRow -= tank.rdel;
+                if (vOff > 0 && tank.screenRow <= SCREENHEIGHT / 2) {
+                    vOff--;
+                }
             }
         }
-    }
-    if(BUTTON_HELD(BUTTON_DOWN)) {
-        tank.aniState = DOWN;
-        if ((tank.worldRow + tank.height) < BKGSIZE) {
-            // Update tank's world position if the above is true
-            tank.worldRow += tank.rdel;
-            if ((vOff + SCREENHEIGHT) < BKGSIZE && tank.screenRow >= (SCREENHEIGHT / 2)) {
-                // Update background offset variable if the above is true
-                vOff++;
+        if(BUTTON_HELD(BUTTON_DOWN)) {
+            tank.aniState = DOWN;
+            if ((tank.worldRow + tank.height) < BKGSIZE) {
+                // Update tank's world position if the above is true
+                tank.worldRow += tank.rdel;
+                if ((vOff + SCREENHEIGHT) < BKGSIZE && tank.screenRow >= (SCREENHEIGHT / 2)) {
+                    // Update background offset variable if the above is true
+                    vOff++;
+                }
             }
         }
-    }
-    if(BUTTON_HELD(BUTTON_LEFT)) {
-        tank.aniState = LEFT;
-        if (tank.worldCol > 0) {
-            // Update tank's world position if the above is true
-            tank.worldCol -= tank.cdel;
-            if (hOff > 0 && tank.screenCol <= SCREENWIDTH / 2) {
-                // Update background offset variable if the above is true
-                hOff--;
+        if(BUTTON_HELD(BUTTON_LEFT)) {
+            tank.aniState = LEFT;
+            if (tank.worldCol > 0) {
+                // Update tank's world position if the above is true
+                tank.worldCol -= tank.cdel;
+                if (hOff > 0 && tank.screenCol <= SCREENWIDTH / 2) {
+                    // Update background offset variable if the above is true
+                    hOff--;
+                }
             }
         }
-    }
-    if(BUTTON_HELD(BUTTON_RIGHT)) {
-        tank.aniState = RIGHT;
-        if ((tank.worldCol + tank.width) < BKGSIZE) {
-            // Update tank's world position if the above is true
-            tank.worldCol += tank.cdel;
-            if (hOff + SCREENWIDTH < BKGSIZE && tank.screenCol >= SCREENWIDTH / 2) {
-                // Update background offset variable if the above is true
-                hOff++;
+        if(BUTTON_HELD(BUTTON_RIGHT)) {
+            tank.aniState = RIGHT;
+            if ((tank.worldCol + tank.width) < BKGSIZE) {
+                // Update tank's world position if the above is true
+                tank.worldCol += tank.cdel;
+                if (hOff + SCREENWIDTH < BKGSIZE && tank.screenCol >= SCREENWIDTH / 2) {
+                    // Update background offset variable if the above is true
+                    hOff++;
+                }
             }
         }
     }
@@ -103,8 +116,24 @@ void updateGame() {
     //animation stuff
     if(tank.aniCounter % 10 == 0) {
         tank.curFrame = (tank.curFrame + 1) % tank.numFrames;
+
         //TIME COUNTER FOR 120SECS HERE FOR EASE OF ACCESS
         loseCount++;
+
+        //dropping new traps and unfreeze player
+        if(loseCount % 40 == 0) {
+            int i = 0;
+            while (i < NUMTRAPS && traps[i].active == 1) {
+                i++;
+            }
+            if(i < NUMTRAPS) {
+                traps[i].active = 1;
+                traps[i].row = (rand() % (BKGSIZE / 16)) * 16; //rand() % (BKGSIZE - (target.height))
+                traps[i].col = (rand() % (BKGSIZE / 16)) * 16;
+            }
+            canMove = 1;
+        }
+
         if(loseCount > 720) {
             gmState = -1;
         }
@@ -113,6 +142,18 @@ void updateGame() {
     tank.screenRow = tank.worldRow - vOff;
     tank.screenCol = tank.worldCol - hOff;
 
+    //update TRAPS
+    for(int i = 0; i < NUMTRAPS; i++) {
+        if(traps[i].active == 1) { //freeze player
+            if(collision(traps[i].col, traps[i].row, traps[i].width, traps[i].height, tank.worldCol, tank.worldRow, tank.width, tank.height)) {
+                traps[i].active = 0;
+                canMove = 0;
+            }
+
+            traps[i].screenRow = traps[i].row - vOff;
+            traps[i].screenCol = traps[i].col - hOff;
+        }
+    }
 
     //update BEACONS
     for(int j = 0; j < NUMBEACONS; j++) {
@@ -193,9 +234,22 @@ void drawGame() {
     }
 
     //draw TARGET
-    shadowOAM[1].attr0 = (target.screenRow) | ATTR0_SQUARE;
-    shadowOAM[1].attr1 = (target.screenCol) | ATTR1_SMALL;
-    shadowOAM[1].attr2 = ATTR2_PALROW(0) | ATTR2_TILEID(18, 0);
+    if(target.visible == 1) {
+        shadowOAM[1].attr0 = (target.screenRow) | ATTR0_SQUARE;
+        shadowOAM[1].attr1 = (target.screenCol) | ATTR1_SMALL;
+        shadowOAM[1].attr2 = ATTR2_PALROW(0) | ATTR2_TILEID(18, 0);
+    }
+
+    //draw TRAPS
+    for(int i = 0; i < NUMTRAPS; i++) {
+        if(traps[i].active == 1 && traps[i].visible == 1) {
+            shadowOAM[i+NUMBEACONS+2].attr0 = (traps[i].screenRow) | ATTR0_SQUARE;
+            shadowOAM[i+NUMBEACONS+2].attr1 = (traps[i].screenCol) | ATTR1_SMALL;
+            shadowOAM[i+NUMBEACONS+2].attr2 = ATTR2_PALROW(0) | ATTR2_TILEID(20, 0);
+        } else {
+            shadowOAM[i+NUMBEACONS+2].attr0 = ATTR0_HIDE;
+        }
+    }
 
     //GENERAL
     waitForVBlank();
