@@ -10,7 +10,6 @@
 	.eabi_attribute 18, 4
 	.file	"game.c"
 	.text
-	.global	__aeabi_idivmod
 	.align	2
 	.global	initGame
 	.arch armv4t
@@ -62,37 +61,38 @@ initGame:
 	cmp	r3, r1
 	bne	.L2
 	ldr	r4, .L6+24
-	ldr	r6, .L6+28
+	ldr	r5, .L6+28
 	str	r2, [r4, #28]
 	str	r2, [r4, #24]
 	mov	lr, pc
-	bx	r6
-	ldr	r1, [r4, #24]
-	ldr	r5, .L6+32
-	rsb	r1, r1, #256
+	bx	r5
+	rsbs	r3, r0, #0
+	and	r3, r3, #15
+	and	r0, r0, #15
+	rsbpl	r0, r3, #0
+	lsl	r0, r0, #4
+	str	r0, [r4]
 	mov	lr, pc
 	bx	r5
-	str	r1, [r4]
-	mov	lr, pc
-	bx	r6
-	ldr	r1, [r4, #28]
-	rsb	r1, r1, #256
-	mov	lr, pc
-	bx	r5
-	mov	r0, #1
-	str	r1, [r4, #4]
-	str	r0, [r4, #52]
+	mov	ip, #1
+	rsbs	r3, r0, #0
+	and	r3, r3, #15
+	and	r0, r0, #15
+	rsbpl	r0, r3, #0
+	lsl	r0, r0, #4
+	str	r0, [r4, #4]
+	str	ip, [r4, #52]
 	mov	r3, #256
-	ldr	r4, .L6+36
+	ldr	r4, .L6+32
 	mov	r0, #3
-	ldr	r2, .L6+40
-	ldr	r1, .L6+44
+	ldr	r2, .L6+36
+	ldr	r1, .L6+40
 	mov	lr, pc
 	bx	r4
 	mov	r3, #16384
 	mov	r0, #3
-	ldr	r2, .L6+48
-	ldr	r1, .L6+52
+	ldr	r2, .L6+44
+	ldr	r1, .L6+48
 	mov	lr, pc
 	bx	r4
 	pop	{r4, r5, r6, lr}
@@ -108,13 +108,13 @@ initGame:
 	.word	beacons
 	.word	target
 	.word	rand
-	.word	__aeabi_idivmod
 	.word	DMANow
 	.word	83886592
 	.word	spritesheetPal
 	.word	100728832
 	.word	spritesheetTiles
 	.size	initGame, .-initGame
+	.global	__aeabi_idivmod
 	.align	2
 	.global	updateGame
 	.syntax unified
@@ -129,58 +129,58 @@ updateGame:
 	ldr	r3, .L71
 	ldrh	r3, [r3, #48]
 	ldr	r5, .L71+4
-	ldr	r7, .L71+8
-	ands	r1, r3, #64
-	ldr	r2, [r7]
-	ldr	r3, [r5, #8]
+	ldr	r8, .L71+8
+	ands	r3, r3, #64
+	ldr	r2, [r5, #8]
+	ldr	fp, [r8]
 	sub	sp, sp, #36
 	bne	.L9
-	cmp	r3, #0
-	str	r1, [r5, #36]
-	ble	.L9
-	ldr	r1, [r5, #16]
 	cmp	r2, #0
-	sub	r3, r3, r1
-	str	r3, [r5, #8]
+	str	r3, [r5, #36]
 	ble	.L9
-	ldr	r1, [r5]
-	cmp	r1, #80
-	suble	r2, r2, #1
-	strle	r2, [r7]
+	ldr	r3, [r5, #16]
+	cmp	fp, #0
+	sub	r2, r2, r3
+	str	r2, [r5, #8]
+	ble	.L9
+	ldr	r3, [r5]
+	cmp	r3, #80
+	suble	fp, fp, #1
+	strle	fp, [r8]
 .L9:
-	ldr	r1, .L71
-	ldrh	r1, [r1, #48]
-	tst	r1, #128
-	ldr	r1, [r5, #28]
-	mov	r0, r1
-	str	r1, [sp, #20]
+	ldr	r3, .L71
+	ldrh	r3, [r3, #48]
+	tst	r3, #128
+	ldr	r3, [r5, #28]
+	mov	r1, r3
+	str	r3, [sp, #20]
 	bne	.L10
-	mov	r1, #2
-	add	r0, r3, r0
-	cmp	r0, #255
-	str	r1, [r5, #36]
-	ble	.L66
+	mov	r3, #2
+	add	r1, r2, r1
+	cmp	r1, #255
+	str	r3, [r5, #36]
+	ble	.L64
 .L10:
-	ldr	r1, .L71
-	ldrh	r1, [r1, #48]
-	ldr	r8, .L71+12
-	tst	r1, #32
-	ldr	fp, [r8]
-	ldr	r9, [r5, #12]
+	ldr	r3, .L71
+	ldrh	r3, [r3, #48]
+	ldr	r7, .L71+12
+	tst	r3, #32
+	ldr	r10, [r7]
+	ldr	r3, [r5, #12]
 	bne	.L11
 	mov	r1, #3
-	cmp	r9, #0
+	cmp	r3, #0
 	str	r1, [r5, #36]
 	ble	.L11
 	ldr	r1, [r5, #20]
-	cmp	fp, #0
-	sub	r9, r9, r1
-	str	r9, [r5, #12]
+	cmp	r10, #0
+	sub	r3, r3, r1
+	str	r3, [r5, #12]
 	ble	.L11
 	ldr	r1, [r5, #4]
 	cmp	r1, #120
-	suble	fp, fp, #1
-	strle	fp, [r8]
+	suble	r10, r10, #1
+	strle	r10, [r7]
 .L11:
 	ldr	r1, .L71
 	ldrh	r1, [r1, #48]
@@ -190,10 +190,10 @@ updateGame:
 	str	r1, [sp, #16]
 	bne	.L12
 	mov	r1, #1
-	add	r0, r0, r9
+	add	r0, r0, r3
 	cmp	r0, #255
 	str	r1, [r5, #36]
-	ble	.L67
+	ble	.L65
 .L12:
 	ldr	r6, [r5, #32]
 	ldr	r1, .L71+16
@@ -204,8 +204,8 @@ updateGame:
 	cmp	r6, r1, lsl #1
 	bne	.L14
 	ldr	r0, [r5, #44]
-	str	r3, [sp, #28]
-	str	r2, [sp, #24]
+	str	r2, [sp, #28]
+	str	r3, [sp, #24]
 	ldr	r4, .L71+20
 	ldr	r1, [r5, #48]
 	add	r0, r0, #1
@@ -219,63 +219,63 @@ updateGame:
 	mvngt	r0, #0
 	str	r1, [r5, #44]
 	ldrgt	r1, .L71+28
-	add	r2, sp, #24
-	ldm	r2, {r2, r3}
+	ldr	r3, [sp, #24]
+	ldr	r2, [sp, #28]
 	strgt	r0, [r1]
 .L14:
-	ldr	r10, .L71+32
-	mov	r4, r10
-	sub	r2, r3, r2
-	sub	fp, r9, fp
-	stm	r5, {r2, fp}
-	ldr	r2, .L71+36
+	ldr	r9, .L71+32
+	mov	r4, r9
+	ldr	r1, .L71+36
+	sub	fp, r2, fp
 	add	r6, r6, #1
+	sub	r10, r3, r10
+	str	fp, [r5]
 	str	r6, [r5, #32]
-	ldrh	r0, [r2]
-	add	fp, r10, #280
+	ldrh	ip, [r1]
+	ldr	fp, .L71+40
+	str	r10, [r5, #4]
+	add	r10, r9, #280
 .L18:
-	tst	r0, #2
+	tst	ip, #2
 	ldr	r1, [r4]
 	beq	.L16
-	ldr	r2, .L71+40
-	ldrh	r6, [r2]
+	ldrh	r6, [fp]
 	ands	r6, r6, #2
-	beq	.L68
+	beq	.L66
 .L16:
-	ldr	ip, [r7]
-	ldr	r2, [r4, #4]
-	sub	r1, r1, ip
-	ldr	ip, [r8]
-	sub	r2, r2, ip
+	ldr	lr, [r8]
+	ldr	r0, [r4, #4]
+	sub	r1, r1, lr
+	ldr	lr, [r7]
+	sub	r0, r0, lr
 	str	r1, [r4, #8]
-	str	r2, [r4, #12]
+	str	r0, [r4, #12]
 	add	r4, r4, #56
-	cmp	fp, r4
+	cmp	r10, r4
 	bne	.L18
 	ldr	r4, .L71+44
-	tst	r0, #1
+	tst	ip, #1
 	ldr	r1, [r4]
 	ldr	r0, [r4, #4]
-	beq	.L29
-	ldr	r2, .L71+40
-	ldrh	r2, [r2]
-	ands	r2, r2, #1
-	bne	.L29
+	beq	.L28
+	ldr	ip, .L71+40
+	ldrh	ip, [ip]
+	ands	ip, ip, #1
+	bne	.L28
 .L20:
-	ldr	ip, [r10, #52]
-	cmp	ip, #1
-	bne	.L69
-	add	r2, r2, #1
-	cmp	r2, #5
-	add	r10, r10, #56
+	ldr	lr, [r9, #52]
+	cmp	lr, #1
+	bne	.L67
+	add	ip, ip, #1
+	cmp	ip, #5
+	add	r9, r9, #56
 	bne	.L20
-.L29:
-	ldr	r2, [sp, #20]
-	str	r2, [sp, #12]
-	ldr	r2, [sp, #16]
-	str	r3, [sp, #4]
-	str	r2, [sp, #8]
-	str	r9, [sp]
+.L28:
+	ldr	ip, [sp, #20]
+	str	ip, [sp, #12]
+	ldr	ip, [sp, #16]
+	stmib	sp, {r2, ip}
+	str	r3, [sp]
 	ldr	ip, .L71+48
 	ldr	r3, [r4, #24]
 	ldr	r2, [r4, #28]
@@ -284,9 +284,9 @@ updateGame:
 	cmp	r0, #0
 	movne	r2, #1
 	ldrne	r3, .L71+28
-	ldr	r0, [r7]
+	ldr	r0, [r8]
 	strne	r2, [r3]
-	ldr	r1, [r8]
+	ldr	r1, [r7]
 	ldm	r4, {r2, r3}
 	sub	r2, r2, r0
 	sub	r3, r3, r1
@@ -296,98 +296,111 @@ updateGame:
 	@ sp needed
 	pop	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	bx	lr
-.L68:
-	ldr	r2, [sp, #20]
-	str	r2, [sp, #12]
-	ldr	r2, [sp, #16]
-	str	r9, [sp]
-	str	r2, [sp, #8]
-	str	r3, [sp, #4]
+.L66:
+	ldr	r0, [sp, #20]
+	str	r0, [sp, #12]
+	ldr	r0, [sp, #16]
+	str	r2, [sp, #4]
+	str	r0, [sp, #8]
+	str	r3, [sp]
 	ldr	ip, .L71+48
 	ldr	r3, [r4, #24]
 	ldr	r2, [r4, #28]
 	ldr	r0, [r4, #4]
 	mov	lr, pc
 	bx	ip
-	ldr	r2, [r5, #24]
+	ldr	r1, [r5, #24]
 	ldr	r3, .L71+36
-	str	r2, [sp, #16]
-	ldr	r2, [r5, #28]
+	str	r1, [sp, #16]
+	ldr	r1, [r5, #28]
 	cmp	r0, #0
-	ldrh	r0, [r3]
-	add	r3, r5, #8
+	add	r2, r5, #8
+	ldrh	ip, [r3]
+	str	r1, [sp, #20]
 	strne	r6, [r4, #52]
-	ldm	r3, {r3, r9}
-	str	r2, [sp, #20]
+	ldm	r2, {r2, r3}
 	ldr	r1, [r4]
 	b	.L16
-.L66:
-	ldr	r1, [r5, #16]
-	cmp	r2, #95
-	add	r3, r3, r1
-	str	r3, [r5, #8]
+.L64:
+	ldr	r3, [r5, #16]
+	cmp	fp, #95
+	add	r2, r2, r3
+	str	r2, [r5, #8]
 	bgt	.L10
-	ldr	r1, [r5]
-	cmp	r1, #79
-	addgt	r2, r2, #1
-	strgt	r2, [r7]
+	ldr	r3, [r5]
+	cmp	r3, #79
+	addgt	fp, fp, #1
+	strgt	fp, [r8]
 	b	.L10
-.L67:
+.L65:
 	ldr	r1, [r5, #20]
-	cmp	fp, #15
-	add	r9, r9, r1
-	str	r9, [r5, #12]
+	cmp	r10, #15
+	add	r3, r3, r1
+	str	r3, [r5, #12]
 	bgt	.L12
 	ldr	r1, [r5, #4]
 	cmp	r1, #119
-	addgt	fp, fp, #1
-	strgt	fp, [r8]
+	addgt	r10, r10, #1
+	strgt	r10, [r7]
 	b	.L12
-.L69:
-	mov	r5, #1
-	ldr	r6, .L71+32
-	rsb	r2, r2, r2, lsl #3
-	add	lr, r3, #8
-	add	ip, r6, r2, lsl #3
-	str	lr, [r6, r2, lsl #3]
+.L67:
+	mov	r10, #1
+	adds	lr, r2, #16
+	ldr	fp, .L71+32
+	addmi	lr, r2, #31
+	adds	r9, r3, #16
+	rsb	r5, ip, ip, lsl #3
+	addmi	r9, r3, #31
+	bic	lr, lr, #15
+	add	r6, fp, r5, lsl #3
+	bic	r9, r9, #15
 	cmp	lr, r1
-	add	r2, r9, #8
-	str	r5, [ip, #52]
-	str	r2, [ip, #4]
-	beq	.L70
+	str	lr, [fp, r5, lsl #3]
+	str	r9, [r6, #4]
+	str	r10, [r6, #52]
+	lsl	r5, ip, #3
+	beq	.L68
 	bge	.L25
-	cmp	r2, r0
-	strlt	r5, [ip, #36]
-	blt	.L29
-	movgt	r2, #2
-	strgt	r2, [ip, #36]
-	bgt	.L29
-	moveq	r2, #7
-	streq	r2, [ip, #36]
-	b	.L29
-.L70:
-	cmp	r2, r0
-	moveq	r2, #0
-	streq	r2, [ip, #36]
-	beq	.L29
-	movlt	r2, #6
-	strlt	r2, [ip, #36]
-	blt	.L29
-	movgt	r2, #8
-	strgt	r2, [ip, #36]
-	b	.L29
+	cmp	r9, r0
+	strlt	r10, [r6, #36]
+	blt	.L28
+	bgt	.L69
+	moveq	ip, #7
+	streq	ip, [r6, #36]
+	b	.L28
+.L68:
+	cmp	r9, r0
+	moveq	ip, #0
+	streq	ip, [r6, #36]
+	beq	.L28
+	movlt	lr, #6
+	strlt	lr, [r6, #36]
+	cmp	r9, r0
+	ble	.L28
+	mov	lr, #8
+	sub	ip, r5, ip
+	ldr	r5, .L71+32
+	add	ip, r5, ip, lsl #3
+	str	lr, [ip, #36]
+	b	.L28
+.L69:
+	mov	ip, #2
+	str	ip, [r6, #36]
+	b	.L28
 .L25:
-	ble	.L29
-	cmp	r2, r0
-	movgt	r2, #3
-	strgt	r2, [ip, #36]
-	bgt	.L29
-	movlt	r2, #4
-	strlt	r2, [ip, #36]
-	blt	.L29
-	moveq	r2, #5
-	streq	r2, [ip, #36]
-	b	.L29
+	ble	.L28
+	cmp	r9, r0
+	movgt	ip, #3
+	strgt	ip, [r6, #36]
+	bgt	.L28
+	blt	.L70
+	moveq	ip, #5
+	streq	ip, [r6, #36]
+	b	.L28
+.L70:
+	mov	ip, #4
+	str	ip, [r6, #36]
+	b	.L28
 .L72:
 	.align	2
 .L71:

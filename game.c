@@ -46,8 +46,8 @@ void initGame() {
     //init TARGET
     target.width = 16;
     target.height = 16;
-    target.row = rand() % (BKGSIZE - (target.height));
-    target.col = rand() % (BKGSIZE - (target.width));
+    target.row = (rand() % (BKGSIZE / 16)) * 16; //rand() % (BKGSIZE - (target.height))
+    target.col = (rand() % (BKGSIZE / 16)) * 16; //rand() % (BKGSIZE - (target.width))
     target.visible = 1; //FOR TESTING / M1
 
     //init GENERAL
@@ -123,6 +123,7 @@ void updateGame() {
         beacons[j].screenCol = beacons[j].col - hOff;
     }
 
+    //drop new beacons
     if(BUTTON_PRESSED(BUTTON_A)) {
         int i = 0;
         while (i < NUMBEACONS && beacons[i].active == 1) {
@@ -130,8 +131,8 @@ void updateGame() {
         }
         if(i < NUMBEACONS) {
             beacons[i].active = 1;
-            beacons[i].row = tank.worldRow + 8;
-            beacons[i].col = tank.worldCol + 8;
+            beacons[i].row = ((tank.worldRow + 16)/16) * 16;
+            beacons[i].col = ((tank.worldCol + 16)/16) * 16;
 
             //LOCATOR CASES
             if(beacons[i].row == target.row && beacons[i].col == target.col) {

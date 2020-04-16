@@ -1,3 +1,20 @@
+/* CURRENT DEVELOPMENT STATUS (4.15)
+Implemented features:
+- Tank is controllable with the arrow-keys and is completely animated
+- Beacons are placeable (A) and pick-up-able (B), and their animation is binded to the location of the target
+- Win state occurs upon colliding with target, lose state triggers after 120seconds otherwise
+- Targets and beacons now naturally spawn on specific grid tiles
+
+Forthcoming features:
+- Music for the game, sound effects for placing beacons
+- Cheat to make the target visible/invisible
+- Larger background? (I've made several sizes, depends what I can figure out how to implement)
+- Non-placeholder art for splash screen, pause, etc.
+
+Known bugs:
+- Beacons sometimes seem to flicker in a different location for a split-second before spawning at the correct location
+- my current rounding system for matching beacons to grid locations prevents the tank from placing beacons on the far-left row or top column. Unclear if there's a way to fix this without causing bigger problems yet.
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include "myLib.h"

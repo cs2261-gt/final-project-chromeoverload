@@ -37,7 +37,7 @@ initialize:
 	strh	r3, [r5, #8]	@ movhi
 	mov	r0, #3
 	strh	r2, [r5, #10]	@ movhi
-	mov	r3, #64
+	mov	r3, #32
 	mov	r2, #100663296
 	ldr	r1, .L4+12
 	mov	lr, pc

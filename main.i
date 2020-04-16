@@ -1342,7 +1342,7 @@ int collision(int colA, int rowA, int widthA, int heightA, int colB, int rowB, i
 # 4 "main.c" 2
 # 1 "background.h" 1
 # 22 "background.h"
-extern const unsigned short backgroundTiles[64];
+extern const unsigned short backgroundTiles[32];
 
 
 extern const unsigned short backgroundMap[1024];
@@ -1537,7 +1537,7 @@ void initialize() {
     (*(volatile unsigned short*)0x4000008) = ((0)<<2) | ((31)<<8) | (0<<14);
     (*(volatile unsigned short*)0x400000A) = ((1)<<2) | ((30)<<8) | (0<<14);
 
-    DMANow(3, backgroundTiles, &((charblock *)0x6000000)[0], 128 / 2);
+    DMANow(3, backgroundTiles, &((charblock *)0x6000000)[0], 64 / 2);
     DMANow(3, backgroundMap, &((screenblock *)0x6000000)[31], 2048 / 2);
 
     DMANow(3, startscreenTiles, &((charblock *)0x6000000)[1], 4128 / 2);

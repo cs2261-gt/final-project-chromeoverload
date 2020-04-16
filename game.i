@@ -1343,7 +1343,7 @@ int collision(int colA, int rowA, int widthA, int heightA, int colB, int rowB, i
 # 5 "game.c" 2
 # 1 "background.h" 1
 # 22 "background.h"
-extern const unsigned short backgroundTiles[64];
+extern const unsigned short backgroundTiles[32];
 
 
 extern const unsigned short backgroundMap[1024];
@@ -1466,8 +1466,8 @@ void initGame() {
 
     target.width = 16;
     target.height = 16;
-    target.row = rand() % (256 - (target.height));
-    target.col = rand() % (256 - (target.width));
+    target.row = (rand() % (256 / 16)) * 16;
+    target.col = (rand() % (256 / 16)) * 16;
     target.visible = 1;
 
 
@@ -1543,6 +1543,7 @@ void updateGame() {
         beacons[j].screenCol = beacons[j].col - hOff;
     }
 
+
     if((!(~(oldButtons)&((1<<0))) && (~buttons & ((1<<0))))) {
         int i = 0;
         while (i < 5 && beacons[i].active == 1) {
@@ -1550,8 +1551,8 @@ void updateGame() {
         }
         if(i < 5) {
             beacons[i].active = 1;
-            beacons[i].row = tank.worldRow + 8;
-            beacons[i].col = tank.worldCol + 8;
+            beacons[i].row = ((tank.worldRow + 16)/16) * 16;
+            beacons[i].col = ((tank.worldCol + 16)/16) * 16;
 
 
             if(beacons[i].row == target.row && beacons[i].col == target.col) {
