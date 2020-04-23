@@ -1343,7 +1343,7 @@ int collision(int colA, int rowA, int widthA, int heightA, int colB, int rowB, i
 # 5 "game.c" 2
 # 1 "background.h" 1
 # 22 "background.h"
-extern const unsigned short backgroundTiles[32];
+extern const unsigned short backgroundTiles[80];
 
 
 extern const unsigned short backgroundMap[1024];
