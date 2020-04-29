@@ -104,11 +104,11 @@ void initialize() {
     //standard palette
     DMANow(3, startscreenPal, PALETTE, 256);
 
-    REG_BG0CNT = BG_CHARBLOCK(0) | BG_SCREENBLOCK(31) | BG_SIZE_SMALL; //grid thing
+    REG_BG0CNT = BG_CHARBLOCK(0) | BG_SCREENBLOCK(26) | BG_SIZE_LARGE; //grid thing
     REG_BG1CNT = BG_CHARBLOCK(1) | BG_SCREENBLOCK(30) | BG_SIZE_SMALL; //other bkgs
 
-    DMANow(3, backgroundTiles, &CHARBLOCK[0], backgroundTilesLen / 2);
-    DMANow(3, backgroundMap, &SCREENBLOCK[31], backgroundMapLen / 2);
+    DMANow(3, medgridTiles, &CHARBLOCK[0], medgridTilesLen / 2);
+    DMANow(3, medgridMap, &SCREENBLOCK[26], medgridMapLen / 2);
 
     DMANow(3, startscreenTiles, &CHARBLOCK[1], startscreenTilesLen / 2);
     DMANow(3, startscreenMap, &SCREENBLOCK[30], startscreenMapLen / 2);

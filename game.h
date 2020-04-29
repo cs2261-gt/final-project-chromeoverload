@@ -4,7 +4,6 @@ extern OBJ_ATTR shadowOAM[128];
 extern int hOff;
 extern int vOff;
 
-
 //Beacon Struct
 typedef struct {
 	int row;
@@ -26,7 +25,7 @@ typedef struct {
 //consts
 #define NUMTRAPS 30
 #define NUMBEACONS 5
-#define BKGSIZE 256
+#define BKGSIZE 512
 
 //prots
 void initGame();

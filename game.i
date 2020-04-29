@@ -1359,7 +1359,6 @@ extern int hOff;
 extern int vOff;
 
 
-
 typedef struct {
  int row;
  int col;
@@ -1456,8 +1455,8 @@ void initGame() {
 
     target.width = 16;
     target.height = 16;
-    target.row = (rand() % (256 / 16)) * 16;
-    target.col = (rand() % (256 / 16)) * 16;
+    target.row = (rand() % (512 / 16)) * 16;
+    target.col = (rand() % (512 / 16)) * 16;
 
 
     for(int i = 0; i < 30; i++) {
@@ -1490,10 +1489,10 @@ void updateGame() {
         }
         if((~((*(volatile unsigned short *)0x04000130)) & ((1<<7)))) {
             tank.aniState = DOWN;
-            if ((tank.worldRow + tank.height) < 256) {
+            if ((tank.worldRow + tank.height) < 512) {
 
                 tank.worldRow += tank.rdel;
-                if ((vOff + 160) < 256 && tank.screenRow >= (160 / 2)) {
+                if ((vOff + 160) < 512 && tank.screenRow >= (160 / 2)) {
 
                     vOff++;
                 }
@@ -1512,10 +1511,10 @@ void updateGame() {
         }
         if((~((*(volatile unsigned short *)0x04000130)) & ((1<<4)))) {
             tank.aniState = RIGHT;
-            if ((tank.worldCol + tank.width) < 256) {
+            if ((tank.worldCol + tank.width) < 512) {
 
                 tank.worldCol += tank.cdel;
-                if (hOff + 240 < 256 && tank.screenCol >= 240 / 2) {
+                if (hOff + 240 < 512 && tank.screenCol >= 240 / 2) {
 
                     hOff++;
                 }
@@ -1538,8 +1537,8 @@ void updateGame() {
             }
             if(i < 30) {
                 traps[i].active = 1;
-                traps[i].row = (rand() % (256 / 16)) * 16;
-                traps[i].col = (rand() % (256 / 16)) * 16;
+                traps[i].row = (rand() % (512 / 16)) * 16;
+                traps[i].col = (rand() % (512 / 16)) * 16;
             }
             canMove = 1;
         }
@@ -1638,7 +1637,7 @@ void drawGame() {
             shadowOAM[i+2].attr1 = (beacons[i].screenCol) | (1<<14);
             shadowOAM[i+2].attr2 = ((0)<<12) | ((beacons[i].aniState * 2)*32+(16));
         } else {
-            shadowOAM[i+2].attr0 = (beacons[i].screenRow) | (0<<14) | (2<<8);
+            shadowOAM[i+2].attr0 = (2<<8);
         }
 
     }
@@ -1649,7 +1648,7 @@ void drawGame() {
         shadowOAM[1].attr1 = (target.screenCol) | (1<<14);
         shadowOAM[1].attr2 = ((0)<<12) | ((0)*32+(18));
     } else {
-        shadowOAM[1].attr0 = (target.screenRow) | (0<<14) | (2<<8);
+        shadowOAM[1].attr0 = (2<<8);
     }
 
 

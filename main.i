@@ -1409,7 +1409,6 @@ extern int hOff;
 extern int vOff;
 
 
-
 typedef struct {
  int row;
  int col;
@@ -1578,11 +1577,11 @@ void initialize() {
 
     DMANow(3, startscreenPal, ((unsigned short *)0x5000000), 256);
 
-    (*(volatile unsigned short*)0x4000008) = ((0)<<2) | ((31)<<8) | (0<<14);
+    (*(volatile unsigned short*)0x4000008) = ((0)<<2) | ((26)<<8) | (3<<14);
     (*(volatile unsigned short*)0x400000A) = ((1)<<2) | ((30)<<8) | (0<<14);
 
-    DMANow(3, backgroundTiles, &((charblock *)0x6000000)[0], 160 / 2);
-    DMANow(3, backgroundMap, &((screenblock *)0x6000000)[31], 2048 / 2);
+    DMANow(3, medgridTiles, &((charblock *)0x6000000)[0], 160 / 2);
+    DMANow(3, medgridMap, &((screenblock *)0x6000000)[26], 8192 / 2);
 
     DMANow(3, startscreenTiles, &((charblock *)0x6000000)[1], 6752 / 2);
     DMANow(3, startscreenMap, &((screenblock *)0x6000000)[30], 2048 / 2);

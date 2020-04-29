@@ -231,7 +231,7 @@ void drawGame() {
             shadowOAM[i+2].attr1 = (beacons[i].screenCol) | ATTR1_SMALL;
             shadowOAM[i+2].attr2 = ATTR2_PALROW(0) | ATTR2_TILEID(16, beacons[i].aniState * 2);
         } else {
-            shadowOAM[i+2].attr0 = (beacons[i].screenRow) | ATTR0_SQUARE | ATTR0_HIDE;
+            shadowOAM[i+2].attr0 = ATTR0_HIDE;
         }
         
     }
@@ -242,7 +242,7 @@ void drawGame() {
         shadowOAM[1].attr1 = (target.screenCol) | ATTR1_SMALL;
         shadowOAM[1].attr2 = ATTR2_PALROW(0) | ATTR2_TILEID(18, 0);
     } else {
-        shadowOAM[1].attr0 = (target.screenRow) | ATTR0_SQUARE | ATTR0_HIDE;
+        shadowOAM[1].attr0 = ATTR0_HIDE;
     }
 
     //draw TRAPS

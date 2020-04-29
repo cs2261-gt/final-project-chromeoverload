@@ -69,8 +69,8 @@ initGame:
 	mov	lr, pc
 	bx	r5
 	rsbs	r2, r0, #0
-	and	r2, r2, #15
-	and	r3, r0, #15
+	and	r2, r2, #31
+	and	r3, r0, #31
 	rsbpl	r3, r2, #0
 	lsl	r3, r3, #4
 	str	r3, [r4]
@@ -79,8 +79,8 @@ initGame:
 	mov	ip, #0
 	mov	r2, #16
 	subs	r1, ip, r0
-	and	r1, r1, #15
-	and	r3, r0, #15
+	and	r1, r1, #31
+	and	r3, r0, #31
 	rsbpl	r3, r1, #0
 	lsl	r1, r3, #4
 	ldr	r3, .L8+36
@@ -348,15 +348,15 @@ updateGame:
 	ldr	r2, [r5, #8]
 	ldr	r3, [r5, #28]
 	add	r3, r2, r3
-	cmp	r3, #255
+	cmp	r3, #512
 	str	r1, [r5, #36]
-	bgt	.L18
+	bge	.L18
 	ldr	r3, [r5, #16]
 	ldr	r1, [r6]
 	add	r2, r3, r2
-	cmp	r1, #95
+	cmp	r1, #352
 	str	r2, [r5, #8]
-	ble	.L108
+	blt	.L108
 .L18:
 	ldr	r3, .L115+56
 	ldrh	r3, [r3, #48]
@@ -372,15 +372,15 @@ updateGame:
 	ldr	r2, [r5, #12]
 	ldr	r3, [r5, #24]
 	add	r3, r2, r3
-	cmp	r3, #255
+	cmp	r3, #512
 	str	r1, [r5, #36]
-	bgt	.L13
+	bge	.L13
 	ldr	r3, [r5, #20]
 	ldr	r1, [r7]
 	add	r2, r3, r2
-	cmp	r1, #15
+	cmp	r1, #272
 	str	r2, [r5, #12]
-	bgt	.L13
+	bge	.L13
 	ldr	r3, [r5, #4]
 	cmp	r3, #119
 	addgt	r1, r1, #1
@@ -419,8 +419,8 @@ updateGame:
 	mov	lr, pc
 	bx	r2
 	rsbs	r1, r0, #0
-	and	r1, r1, #15
-	and	r3, r0, #15
+	and	r1, r1, #31
+	and	r3, r0, #31
 	rsbpl	r3, r1, #0
 	lsl	r3, r3, #4
 	str	r3, [r9, r4]
@@ -428,8 +428,8 @@ updateGame:
 	mov	lr, pc
 	bx	r2
 	rsbs	r2, r0, #0
-	and	r2, r2, #15
-	and	r3, r0, #15
+	and	r2, r2, #31
+	and	r3, r0, #31
 	rsbpl	r3, r2, #0
 	lsl	r3, r3, #4
 	ldr	r0, [r8]
@@ -603,55 +603,55 @@ drawGame:
 	@ Function supports interworking.
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
-	push	{r4, r5, r6, lr}
-	ldr	r6, .L130
-	ldr	r0, [r6, #4]
+	push	{r4, r5, r6, r7, r8, lr}
+	ldr	r4, .L130
+	ldr	r0, [r4, #4]
 	mvn	r0, r0, lsl #17
 	mvn	r0, r0, lsr #17
 	ldr	ip, .L130+4
+	mov	r6, #512
 	mov	r2, ip
 	mov	r5, ip
 	mov	r1, ip
-	ldr	lr, [r6, #44]
-	ldr	r3, [r6, #36]
+	ldr	lr, [r4, #44]
+	ldr	r3, [r4, #36]
 	add	r3, r3, lr, lsl #5
 	lsl	r3, r3, #2
 	strh	r0, [ip, #2]	@ movhi
-	ldr	r0, [r6]
+	ldr	r0, [r4]
 	strh	r3, [ip, #4]	@ movhi
 	ldr	r3, .L130+8
 	strh	r0, [ip]	@ movhi
-	add	r4, r3, #280
+	add	lr, r3, #280
 .L120:
 	ldr	r0, [r3, #52]
 	cmp	r0, #1
-	ldreq	ip, [r3, #36]
-	ldr	r0, [r3, #8]
-	ldreq	lr, [r3, #12]
-	lsleq	ip, ip, #6
-	addeq	ip, ip, #16
-	orreq	lr, lr, #16384
-	orrne	r0, r0, #512
+	ldreq	r0, [r3, #36]
+	ldreq	ip, [r3, #12]
+	ldreq	r7, [r3, #8]
+	lsleq	r0, r0, #6
+	addeq	r0, r0, #16
+	orreq	ip, ip, #16384
 	add	r3, r3, #56
-	strheq	r0, [r1, #16]	@ movhi
-	strheq	ip, [r1, #20]	@ movhi
-	strheq	lr, [r1, #18]	@ movhi
-	strhne	r0, [r1, #16]	@ movhi
-	cmp	r3, r4
+	strheq	r0, [r1, #20]	@ movhi
+	strheq	ip, [r1, #18]	@ movhi
+	strheq	r7, [r1, #16]	@ movhi
+	strhne	r6, [r1, #16]	@ movhi
+	cmp	r3, lr
 	add	r1, r1, #8
 	bne	.L120
-	ldr	r1, .L130+12
-	ldr	lr, [r6, #52]
-	ldr	r3, [r1, #8]
+	ldr	lr, [r4, #52]
 	cmp	lr, #1
-	orrne	r3, r3, #512
+	movne	r3, #512
 	strhne	r3, [r5, #8]	@ movhi
 	bne	.L123
 	mov	r0, #18
-	ldr	r1, [r1, #12]
-	orr	r1, r1, #16384
-	strh	r1, [r5, #10]	@ movhi
-	strh	r3, [r5, #8]	@ movhi
+	ldr	r1, .L130+12
+	add	r1, r1, #8
+	ldm	r1, {r1, r3}
+	orr	r3, r3, #16384
+	strh	r3, [r5, #10]	@ movhi
+	strh	r1, [r5, #8]	@ movhi
 	strh	r0, [r5, #12]	@ movhi
 .L123:
 	ldr	r3, .L130+16
@@ -698,7 +698,7 @@ drawGame:
 	ldr	r2, .L130+32
 	ldrh	r2, [r2]
 	strh	r1, [r3, #16]	@ movhi
-	pop	{r4, r5, r6, lr}
+	pop	{r4, r5, r6, r7, r8, lr}
 	strh	r2, [r3, #18]	@ movhi
 	bx	lr
 .L131:
