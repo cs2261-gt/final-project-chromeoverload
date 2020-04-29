@@ -2,7 +2,7 @@
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "main.c"
-# 24 "main.c"
+# 22 "main.c"
 # 1 "c:\\users\\jared\\documents\\devkitarm\\devkitpro\\devkitarm\\arm-none-eabi\\include\\stdio.h" 1 3
 # 29 "c:\\users\\jared\\documents\\devkitarm\\devkitpro\\devkitarm\\arm-none-eabi\\include\\stdio.h" 3
 # 1 "c:\\users\\jared\\documents\\devkitarm\\devkitpro\\devkitarm\\arm-none-eabi\\include\\_ansi.h" 1 3
@@ -1045,7 +1045,7 @@ _putchar_unlocked(int _c)
 }
 # 797 "c:\\users\\jared\\documents\\devkitarm\\devkitpro\\devkitarm\\arm-none-eabi\\include\\stdio.h" 3
 
-# 25 "main.c" 2
+# 23 "main.c" 2
 # 1 "c:\\users\\jared\\documents\\devkitarm\\devkitpro\\devkitarm\\arm-none-eabi\\include\\stdlib.h" 1 3
 # 10 "c:\\users\\jared\\documents\\devkitarm\\devkitpro\\devkitarm\\arm-none-eabi\\include\\stdlib.h" 3
 # 1 "c:\\users\\jared\\documents\\devkitarm\\devkitpro\\devkitarm\\arm-none-eabi\\include\\machine\\ieeefp.h" 1 3
@@ -1230,7 +1230,7 @@ extern long double _strtold_r (struct _reent *, const char *restrict, char **res
 extern long double strtold (const char *restrict, char **restrict);
 # 336 "c:\\users\\jared\\documents\\devkitarm\\devkitpro\\devkitarm\\arm-none-eabi\\include\\stdlib.h" 3
 
-# 26 "main.c" 2
+# 24 "main.c" 2
 # 1 "myLib.h" 1
 
 
@@ -1340,7 +1340,7 @@ typedef struct{
 
 
 int collision(int colA, int rowA, int widthA, int heightA, int colB, int rowB, int widthB, int heightB);
-# 27 "main.c" 2
+# 25 "main.c" 2
 # 1 "background.h" 1
 # 22 "background.h"
 extern const unsigned short backgroundTiles[80];
@@ -1350,7 +1350,7 @@ extern const unsigned short backgroundMap[1024];
 
 
 extern const unsigned short backgroundPal[256];
-# 28 "main.c" 2
+# 26 "main.c" 2
 # 1 "startscreen.h" 1
 # 22 "startscreen.h"
 extern const unsigned short startscreenTiles[2240];
@@ -1360,7 +1360,7 @@ extern const unsigned short startscreenMap[1024];
 
 
 extern const unsigned short startscreenPal[256];
-# 29 "main.c" 2
+# 27 "main.c" 2
 # 1 "pausescreen.h" 1
 # 22 "pausescreen.h"
 extern const unsigned short pausescreenTiles[1328];
@@ -1370,7 +1370,7 @@ extern const unsigned short pausescreenMap[1024];
 
 
 extern const unsigned short pausescreenPal[256];
-# 30 "main.c" 2
+# 28 "main.c" 2
 # 1 "winscreen.h" 1
 # 22 "winscreen.h"
 extern const unsigned short winscreenTiles[1600];
@@ -1380,7 +1380,7 @@ extern const unsigned short winscreenMap[1024];
 
 
 extern const unsigned short winscreenPal[256];
-# 31 "main.c" 2
+# 29 "main.c" 2
 # 1 "losescreen.h" 1
 # 22 "losescreen.h"
 extern const unsigned short losescreenTiles[2128];
@@ -1390,7 +1390,7 @@ extern const unsigned short losescreenMap[1024];
 
 
 extern const unsigned short losescreenPal[256];
-# 32 "main.c" 2
+# 30 "main.c" 2
 # 1 "instructscreen.h" 1
 # 22 "instructscreen.h"
 extern const unsigned short instructscreenTiles[4720];
@@ -1400,7 +1400,7 @@ extern const unsigned short instructscreenMap[1024];
 
 
 extern const unsigned short instructscreenPal[256];
-# 33 "main.c" 2
+# 31 "main.c" 2
 # 1 "game.h" 1
 
 
@@ -1453,7 +1453,7 @@ typedef struct {
     int numFrames;
  int active;
 } TARGET;
-# 34 "main.c" 2
+# 32 "main.c" 2
 # 1 "sound.h" 1
 SOUND soundA;
 SOUND soundB;
@@ -1470,15 +1470,15 @@ void interruptHandler();
 void pauseSound();
 void unpauseSound();
 void stopSound();
-# 35 "main.c" 2
+# 33 "main.c" 2
 # 1 "gameSong.h" 1
 # 20 "gameSong.h"
 extern const unsigned char gameSong[859195];
-# 36 "main.c" 2
+# 34 "main.c" 2
 # 1 "loseSound.h" 1
 # 20 "loseSound.h"
 extern const unsigned char loseSound[55831];
-# 37 "main.c" 2
+# 35 "main.c" 2
 # 1 "bottompause.h" 1
 # 22 "bottompause.h"
 extern const unsigned short bottompauseTiles[1552];
@@ -1488,7 +1488,7 @@ extern const unsigned short bottompauseMap[1024];
 
 
 extern const unsigned short bottompausePal[256];
-# 38 "main.c" 2
+# 36 "main.c" 2
 # 1 "toppause.h" 1
 # 22 "toppause.h"
 extern const unsigned short toppauseTiles[2256];
@@ -1498,7 +1498,7 @@ extern const unsigned short toppauseMap[1024];
 
 
 extern const unsigned short toppausePal[256];
-# 39 "main.c" 2
+# 37 "main.c" 2
 # 1 "medgrid.h" 1
 # 22 "medgrid.h"
 extern const unsigned short medgridTiles[80];
@@ -1508,7 +1508,7 @@ extern const unsigned short medgridMap[4096];
 
 
 extern const unsigned short medgridPal[256];
-# 40 "main.c" 2
+# 38 "main.c" 2
 
 
 void initialize();

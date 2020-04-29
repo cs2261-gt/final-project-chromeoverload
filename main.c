@@ -9,13 +9,11 @@ Implemented features:
 - New art for pause, splash, instruction screens 
 - effect for pause screen because I couldn't figure out 1024x1024 in time :(
 - failed big background attempt 2
-
+- Cheat to make the target visible/invisible; setting visibility by default to negative for final submission (!NOTETOSELF)
 
 Forthcoming features:
 - sfx for the win state, maybe assorted SFX, just for grins tbh
-- Cheat to make the target visible/invisible; setting visibility by default to negative for final submission (!NOTETOSELF)
 - Larger background? (I've made several sizes in my pixel art editor file (.gm81), depends what I can figure out how to implement, sticking with the small version for now for testing purposes)
-- !better pause, splash art
 
 Known bugs:
 - my current rounding system for matching beacons to grid locations prevents the tank from placing beacons on the far-left row or top column. Unclear if there's a way to fix this without causing bigger problems yet.
