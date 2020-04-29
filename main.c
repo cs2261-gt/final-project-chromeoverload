@@ -6,19 +6,18 @@ Implemented features:
 - Targets, traps, and beacons now naturally spawn on specific grid tiles
 - Over time, 'traps' (normally invisible but, like target, rendered visible for grading/testing) randomly spawn that temporarily halt the player
 - Sound for game music and lose state
-- New art, cool 
+- New art for pause, splash, instruction screens 
 effect for pause screen because I couldn't figure out 1024x1024 in time :( maybe I will by the 29th lol
 
 Forthcoming features:
 - sfx for the win state, maybe assorted SFX, just for grins tbh
 - Cheat to make the target visible/invisible; setting visibility by default to negative for final submission (!NOTETOSELF)
 - Larger background? (I've made several sizes in my pixel art editor file (.gm81), depends what I can figure out how to implement, sticking with the small version for now for testing purposes)
-- New non-placeholder art for splash screen, pause, etc.
+- !better pause, splash art
 
 Known bugs:
 - my current rounding system for matching beacons to grid locations prevents the tank from placing beacons on the far-left row or top column. Unclear if there's a way to fix this without causing bigger problems yet.
 - as mentioned above, still many problems with large bckground sizes. flickering, object location swapping, and now some really weird stuff (giant black squares???). Will be trying again for final submission...
-- still some beacon flickering? tiles stay put now, and no more weirdness in the corners, but there's still some issue with placement or modulation somewhere I suspect....
 */
 
 #include <stdio.h>
@@ -36,6 +35,7 @@ Known bugs:
 #include "loseSound.h"
 #include "bottompause.h"
 #include "toppause.h"
+#include "medgrid.h"
 
 // Prototypes
 void initialize();

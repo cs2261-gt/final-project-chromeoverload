@@ -117,8 +117,8 @@ SOUND soundB;
 
 
 void setupSounds();
-void playSoundA(const signed char* sound, int length, int loops);
-void playSoundB(const signed char* sound, int length, int loops);
+void playSoundA(const unsigned char* sound, int length, int loops);
+void playSoundB(const unsigned char* sound, int length, int loops);
 
 void setupInterrupts();
 void interruptHandler();
@@ -145,7 +145,7 @@ void setupSounds()
     *(u16*)0x04000080 = 0;
 }
 
-void playSoundA( const signed char* sound, int length, int loops) {
+void playSoundA( const unsigned char* sound, int length, int loops) {
         dma[1].cnt = 0;
 
         int ticks = (16777216) / 11025;
@@ -169,7 +169,7 @@ void playSoundA( const signed char* sound, int length, int loops) {
 }
 
 
-void playSoundB( const signed char* sound, int length, int loops) {
+void playSoundB( const unsigned char* sound, int length, int loops) {
 
         dma[2].cnt = 0;
 

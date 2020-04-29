@@ -1359,20 +1359,6 @@ extern int hOff;
 extern int vOff;
 
 
-typedef struct {
- int row;
- int col;
- int cdel;
- int rdel;
- int height;
- int width;
- int aniCounter;
-    int aniState;
-    int prevAniState;
-    int curFrame;
-    int numFrames;
-} TANK;
-
 
 typedef struct {
  int row;
@@ -1416,7 +1402,6 @@ typedef struct {
     int prevAniState;
     int curFrame;
     int numFrames;
-    int visible;
  int active;
 } TARGET;
 # 7 "game.c" 2
@@ -1473,13 +1458,11 @@ void initGame() {
     target.height = 16;
     target.row = (rand() % (256 / 16)) * 16;
     target.col = (rand() % (256 / 16)) * 16;
-    target.visible = 1;
 
 
     for(int i = 0; i < 30; i++) {
         traps[i].width = 16;
         traps[i].height = 16;
-        traps[i].visible = 1;
         traps[i].active = 0;
     }
 
@@ -1489,6 +1472,11 @@ void initGame() {
 }
 
 void updateGame() {
+
+    if((!(~(oldButtons)&((1<<2))) && (~buttons & ((1<<2))))) {
+        tank.hide = 1 - tank.hide;
+    }
+
 
     if(canMove == 1) {
         if((~((*(volatile unsigned short *)0x04000130)) & ((1<<6)))) {
@@ -1578,24 +1566,16 @@ void updateGame() {
     }
 
 
-    for(int j = 0; j < 5; j++) {
-        if((!(~(oldButtons)&((1<<1))) && (~buttons & ((1<<1)))) && collision(beacons[j].col, beacons[j].row, beacons[j].width, beacons[j].height, tank.worldCol, tank.worldRow, tank.width, tank.height)) {
-            beacons[j].active = 0;
-        }
-        beacons[j].screenRow = beacons[j].row - vOff;
-        beacons[j].screenCol = beacons[j].col - hOff;
-    }
-
-
     if((!(~(oldButtons)&((1<<0))) && (~buttons & ((1<<0))))) {
         int i = 0;
         while (i < 5 && beacons[i].active == 1) {
             i++;
         }
         if(i < 5) {
-            beacons[i].active = 1;
             beacons[i].row = ((tank.worldRow + 16)/16) * 16;
             beacons[i].col = ((tank.worldCol + 16)/16) * 16;
+
+            beacons[i].active = 1;
 
 
             if(beacons[i].row == target.row && beacons[i].col == target.col) {
@@ -1629,6 +1609,14 @@ void updateGame() {
     }
 
 
+    for(int j = 0; j < 5; j++) {
+        if((!(~(oldButtons)&((1<<1))) && (~buttons & ((1<<1)))) && collision(beacons[j].col, beacons[j].row, beacons[j].width, beacons[j].height, tank.worldCol, tank.worldRow, tank.width, tank.height)) {
+            beacons[j].active = 0;
+        }
+        beacons[j].screenRow = beacons[j].row - vOff;
+        beacons[j].screenCol = beacons[j].col - hOff;
+    }
+
 
     if (collision(target.col, target.row, target.width, target.height, tank.worldCol, tank.worldRow, tank.width, tank.height)) {
         gmState = 1;
@@ -1656,15 +1644,17 @@ void drawGame() {
     }
 
 
-    if(target.visible == 1) {
+    if(tank.hide == 1) {
         shadowOAM[1].attr0 = (target.screenRow) | (0<<14);
         shadowOAM[1].attr1 = (target.screenCol) | (1<<14);
         shadowOAM[1].attr2 = ((0)<<12) | ((0)*32+(18));
+    } else {
+        shadowOAM[1].attr0 = (target.screenRow) | (0<<14) | (2<<8);
     }
 
 
     for(int i = 0; i < 30; i++) {
-        if(traps[i].active == 1 && traps[i].visible == 1) {
+        if(traps[i].active == 1 && tank.hide == 1) {
             shadowOAM[i+5 +2].attr0 = (traps[i].screenRow) | (0<<14);
             shadowOAM[i+5 +2].attr1 = (traps[i].screenCol) | (1<<14);
             shadowOAM[i+5 +2].attr2 = ((0)<<12) | ((0)*32+(20));

@@ -18,7 +18,7 @@ void setupSounds()
     REG_SOUNDCNT_L = 0;
 }
 
-void playSoundA( const signed char* sound, int length, int loops) {
+void playSoundA( const unsigned char* sound, int length, int loops) {
         dma[1].cnt = 0;
 
         int ticks = PROCESSOR_CYCLES_PER_SECOND / SOUND_FREQ;
@@ -42,7 +42,7 @@ void playSoundA( const signed char* sound, int length, int loops) {
 }
 
 
-void playSoundB( const signed char* sound, int length, int loops) {
+void playSoundB( const unsigned char* sound, int length, int loops) {
 
         dma[2].cnt = 0;
 

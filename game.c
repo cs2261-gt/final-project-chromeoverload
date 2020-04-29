@@ -51,13 +51,11 @@ void initGame() {
     target.height = 16;
     target.row = (rand() % (BKGSIZE / 16)) * 16; //rand() % (BKGSIZE - (target.height))
     target.col = (rand() % (BKGSIZE / 16)) * 16; //rand() % (BKGSIZE - (target.width))
-    target.visible = 1; //FOR TESTING
 
     //init TRAPS
     for(int i = 0; i < NUMTRAPS; i++) {
         traps[i].width = 16;
         traps[i].height = 16;
-        traps[i].visible = 1; //FOR TESTING
         traps[i].active = 0;
     }
 
@@ -67,6 +65,11 @@ void initGame() {
 }
 
 void updateGame() {
+    //toggle visibility CHEAT
+    if(BUTTON_PRESSED(BUTTON_SELECT)) {
+        tank.hide = 1 - tank.hide; 
+    }
+
     //update TANK
     if(canMove == 1) {
         if(BUTTON_HELD(BUTTON_UP)) {
@@ -155,15 +158,6 @@ void updateGame() {
         }
     }
 
-    //update BEACONS
-    for(int j = 0; j < NUMBEACONS; j++) {
-        if(BUTTON_PRESSED(BUTTON_B) && collision(beacons[j].col, beacons[j].row, beacons[j].width, beacons[j].height, tank.worldCol, tank.worldRow, tank.width, tank.height)) {
-            beacons[j].active = 0;
-        }
-        beacons[j].screenRow = beacons[j].row - vOff;
-        beacons[j].screenCol = beacons[j].col - hOff;
-    }
-
     //drop new beacons
     if(BUTTON_PRESSED(BUTTON_A)) {
         int i = 0;
@@ -171,9 +165,10 @@ void updateGame() {
             i++;
         }
         if(i < NUMBEACONS) {
-            beacons[i].active = 1;
             beacons[i].row = ((tank.worldRow + 16)/16) * 16;
             beacons[i].col = ((tank.worldCol + 16)/16) * 16;
+
+            beacons[i].active = 1;
 
             //LOCATOR CASES
             if(beacons[i].row == target.row && beacons[i].col == target.col) {
@@ -206,6 +201,14 @@ void updateGame() {
         }
     }
 
+    //update BEACONS
+    for(int j = 0; j < NUMBEACONS; j++) {
+        if(BUTTON_PRESSED(BUTTON_B) && collision(beacons[j].col, beacons[j].row, beacons[j].width, beacons[j].height, tank.worldCol, tank.worldRow, tank.width, tank.height)) {
+            beacons[j].active = 0;
+        }
+        beacons[j].screenRow = beacons[j].row - vOff;
+        beacons[j].screenCol = beacons[j].col - hOff;
+    }
 
     //update TARGET
     if (collision(target.col, target.row, target.width, target.height, tank.worldCol, tank.worldRow, tank.width, tank.height)) {
@@ -234,15 +237,17 @@ void drawGame() {
     }
 
     //draw TARGET
-    if(target.visible == 1) {
+    if(tank.hide == 1) {
         shadowOAM[1].attr0 = (target.screenRow) | ATTR0_SQUARE;
         shadowOAM[1].attr1 = (target.screenCol) | ATTR1_SMALL;
         shadowOAM[1].attr2 = ATTR2_PALROW(0) | ATTR2_TILEID(18, 0);
+    } else {
+        shadowOAM[1].attr0 = (target.screenRow) | ATTR0_SQUARE | ATTR0_HIDE;
     }
 
     //draw TRAPS
     for(int i = 0; i < NUMTRAPS; i++) {
-        if(traps[i].active == 1 && traps[i].visible == 1) {
+        if(traps[i].active == 1 && tank.hide == 1) {
             shadowOAM[i+NUMBEACONS+2].attr0 = (traps[i].screenRow) | ATTR0_SQUARE;
             shadowOAM[i+NUMBEACONS+2].attr1 = (traps[i].screenCol) | ATTR1_SMALL;
             shadowOAM[i+NUMBEACONS+2].attr2 = ATTR2_PALROW(0) | ATTR2_TILEID(20, 0);

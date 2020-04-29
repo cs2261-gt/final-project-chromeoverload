@@ -1409,20 +1409,6 @@ extern int hOff;
 extern int vOff;
 
 
-typedef struct {
- int row;
- int col;
- int cdel;
- int rdel;
- int height;
- int width;
- int aniCounter;
-    int aniState;
-    int prevAniState;
-    int curFrame;
-    int numFrames;
-} TANK;
-
 
 typedef struct {
  int row;
@@ -1466,7 +1452,6 @@ typedef struct {
     int prevAniState;
     int curFrame;
     int numFrames;
-    int visible;
  int active;
 } TARGET;
 # 33 "main.c" 2
@@ -1477,8 +1462,8 @@ SOUND soundB;
 
 
 void setupSounds();
-void playSoundA(const signed char* sound, int length, int loops);
-void playSoundB(const signed char* sound, int length, int loops);
+void playSoundA(const unsigned char* sound, int length, int loops);
+void playSoundB(const unsigned char* sound, int length, int loops);
 
 void setupInterrupts();
 void interruptHandler();
@@ -1515,6 +1500,16 @@ extern const unsigned short toppauseMap[1024];
 
 extern const unsigned short toppausePal[256];
 # 38 "main.c" 2
+# 1 "medgrid.h" 1
+# 22 "medgrid.h"
+extern const unsigned short medgridTiles[80];
+
+
+extern const unsigned short medgridMap[4096];
+
+
+extern const unsigned short medgridPal[256];
+# 39 "main.c" 2
 
 
 void initialize();

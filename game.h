@@ -4,20 +4,6 @@ extern OBJ_ATTR shadowOAM[128];
 extern int hOff;
 extern int vOff;
 
-//Tank Struct
-typedef struct {
-	int row;
-	int col;
-	int cdel;
-	int rdel;
-	int height;
-	int width;
-	int aniCounter;
-    int aniState;
-    int prevAniState;
-    int curFrame;
-    int numFrames;
-} TANK;
 
 //Beacon Struct
 typedef struct {
@@ -62,6 +48,5 @@ typedef struct {
     int prevAniState;
     int curFrame;
     int numFrames;
-    int visible;
 	int active;
 } TARGET;
