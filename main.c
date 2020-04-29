@@ -7,7 +7,9 @@ Implemented features:
 - Over time, 'traps' (normally invisible but, like target, rendered visible for grading/testing) randomly spawn that temporarily halt the player
 - Sound for game music and lose state
 - New art for pause, splash, instruction screens 
-effect for pause screen because I couldn't figure out 1024x1024 in time :( maybe I will by the 29th lol
+- effect for pause screen because I couldn't figure out 1024x1024 in time :(
+- failed big background attempt 2
+
 
 Forthcoming features:
 - sfx for the win state, maybe assorted SFX, just for grins tbh
@@ -17,7 +19,6 @@ Forthcoming features:
 
 Known bugs:
 - my current rounding system for matching beacons to grid locations prevents the tank from placing beacons on the far-left row or top column. Unclear if there's a way to fix this without causing bigger problems yet.
-- as mentioned above, still many problems with large bckground sizes. flickering, object location swapping, and now some really weird stuff (giant black squares???). Will be trying again for final submission...
 */
 
 #include <stdio.h>
@@ -104,11 +105,11 @@ void initialize() {
     //standard palette
     DMANow(3, startscreenPal, PALETTE, 256);
 
-    REG_BG0CNT = BG_CHARBLOCK(0) | BG_SCREENBLOCK(26) | BG_SIZE_LARGE; //grid thing
+    REG_BG0CNT = BG_CHARBLOCK(0) | BG_SCREENBLOCK(31) | BG_SIZE_SMALL; //grid thing
     REG_BG1CNT = BG_CHARBLOCK(1) | BG_SCREENBLOCK(30) | BG_SIZE_SMALL; //other bkgs
 
-    DMANow(3, medgridTiles, &CHARBLOCK[0], medgridTilesLen / 2);
-    DMANow(3, medgridMap, &SCREENBLOCK[26], medgridMapLen / 2);
+    DMANow(3, backgroundTiles, &CHARBLOCK[0], medgridTilesLen / 2);
+    DMANow(3, backgroundMap, &SCREENBLOCK[31], medgridMapLen / 2);
 
     DMANow(3, startscreenTiles, &CHARBLOCK[1], startscreenTilesLen / 2);
     DMANow(3, startscreenMap, &SCREENBLOCK[30], startscreenMapLen / 2);

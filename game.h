@@ -25,7 +25,7 @@ typedef struct {
 //consts
 #define NUMTRAPS 30
 #define NUMBEACONS 5
-#define BKGSIZE 512
+#define BKGSIZE 256
 
 //prots
 void initGame();

@@ -32,7 +32,7 @@ initialize:
 	ldr	r1, .L4+4
 	mov	lr, pc
 	bx	r4
-	mov	r3, #55808
+	mov	r3, #7936
 	ldr	r2, .L4+8
 	strh	r3, [r5, #8]	@ movhi
 	mov	r0, #3
@@ -48,7 +48,7 @@ initialize:
 	ldr	r1, .L4+20
 	mov	lr, pc
 	bx	r4
-	mov	r3, #3376
+	mov	r3, #2240
 	mov	r0, #3
 	ldr	r2, .L4+24
 	ldr	r1, .L4+28
@@ -78,9 +78,9 @@ initialize:
 	.word	DMANow
 	.word	startscreenPal
 	.word	7684
-	.word	medgridTiles
-	.word	100716544
-	.word	medgridMap
+	.word	backgroundTiles
+	.word	100726784
+	.word	backgroundMap
 	.word	100679680
 	.word	startscreenTiles
 	.word	100724736
@@ -117,7 +117,7 @@ goToStart:
 	strh	r1, [r3]	@ movhi
 	strh	r2, [r3, #10]	@ movhi
 	mov	r0, #3
-	mov	r3, #3376
+	mov	r3, #2240
 	ldr	r2, .L8+16
 	ldr	r1, .L8+20
 	mov	lr, pc

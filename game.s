@@ -69,8 +69,8 @@ initGame:
 	mov	lr, pc
 	bx	r5
 	rsbs	r2, r0, #0
-	and	r2, r2, #31
-	and	r3, r0, #31
+	and	r2, r2, #15
+	and	r3, r0, #15
 	rsbpl	r3, r2, #0
 	lsl	r3, r3, #4
 	str	r3, [r4]
@@ -79,8 +79,8 @@ initGame:
 	mov	ip, #0
 	mov	r2, #16
 	subs	r1, ip, r0
-	and	r1, r1, #31
-	and	r3, r0, #31
+	and	r1, r1, #15
+	and	r3, r0, #15
 	rsbpl	r3, r1, #0
 	lsl	r1, r3, #4
 	ldr	r3, .L8+36
@@ -348,15 +348,15 @@ updateGame:
 	ldr	r2, [r5, #8]
 	ldr	r3, [r5, #28]
 	add	r3, r2, r3
-	cmp	r3, #512
+	cmp	r3, #255
 	str	r1, [r5, #36]
-	bge	.L18
+	bgt	.L18
 	ldr	r3, [r5, #16]
 	ldr	r1, [r6]
 	add	r2, r3, r2
-	cmp	r1, #352
+	cmp	r1, #95
 	str	r2, [r5, #8]
-	blt	.L108
+	ble	.L108
 .L18:
 	ldr	r3, .L115+56
 	ldrh	r3, [r3, #48]
@@ -372,15 +372,15 @@ updateGame:
 	ldr	r2, [r5, #12]
 	ldr	r3, [r5, #24]
 	add	r3, r2, r3
-	cmp	r3, #512
+	cmp	r3, #255
 	str	r1, [r5, #36]
-	bge	.L13
+	bgt	.L13
 	ldr	r3, [r5, #20]
 	ldr	r1, [r7]
 	add	r2, r3, r2
-	cmp	r1, #272
+	cmp	r1, #15
 	str	r2, [r5, #12]
-	bge	.L13
+	bgt	.L13
 	ldr	r3, [r5, #4]
 	cmp	r3, #119
 	addgt	r1, r1, #1
@@ -419,8 +419,8 @@ updateGame:
 	mov	lr, pc
 	bx	r2
 	rsbs	r1, r0, #0
-	and	r1, r1, #31
-	and	r3, r0, #31
+	and	r1, r1, #15
+	and	r3, r0, #15
 	rsbpl	r3, r1, #0
 	lsl	r3, r3, #4
 	str	r3, [r9, r4]
@@ -428,8 +428,8 @@ updateGame:
 	mov	lr, pc
 	bx	r2
 	rsbs	r2, r0, #0
-	and	r2, r2, #31
-	and	r3, r0, #31
+	and	r2, r2, #15
+	and	r3, r0, #15
 	rsbpl	r3, r2, #0
 	lsl	r3, r3, #4
 	ldr	r0, [r8]
